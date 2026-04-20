@@ -95,6 +95,69 @@ function App() {
     };
   }, [isLoading]);
 
+  // Flowise Chatbot Initializer
+  useEffect(() => {
+    if (hideLoadingScreen) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.innerHTML = `
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js";
+        Chatbot.init({
+            chatflowid: "06ab5077-6744-4d72-93cf-d1978bd9e87d",
+            apiHost: "https://cloud.flowiseai.com",
+            theme: {
+              button: {
+                  backgroundColor: "#ff0000",
+                  right: 20,
+                  bottom: 20,
+                  size: 56,
+                  iconColor: "white"
+              },
+              chatWindow: {
+                  welcomeMessage: "Hello! How can I help you today?",
+                  backgroundColor: "#111111",
+                  height: 600,
+                  width: 400,
+                  fontSize: 16,
+                  poweredByTextColor: "#555555",
+                  botMessage: {
+                      backgroundColor: "#222222",
+                      textColor: "#ffffff",
+                      showAvatar: true
+                  },
+                  userMessage: {
+                      backgroundColor: "#ff0000",
+                      textColor: "#ffffff",
+                      showAvatar: false
+                  },
+                  textInput: {
+                      placeholder: "Type your message...",
+                      backgroundColor: "#1a1a1a",
+                      textColor: "#ffffff",
+                      sendButtonColor: "#ff0000",
+                      autoFocus: true,
+                      sendMessageSound: true,
+                      receiveMessageSound: true
+                  }
+              }
+            }
+        });
+      `;
+      document.body.appendChild(script);
+
+      return () => {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+        // Also remove the custom element created by Flowise if it exists
+        const chatbotEl = document.querySelector('flowise-chatbot');
+        if (chatbotEl && chatbotEl.parentNode) {
+          chatbotEl.parentNode.removeChild(chatbotEl);
+        }
+      };
+    }
+  }, [hideLoadingScreen]);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormStatus('submitting');
@@ -191,7 +254,7 @@ function App() {
 
           {/* Mobile Menu Overlay */}
           {mobileMenuOpen && (
-            <div className="md:hidden flex flex-col items-center bg-[#111] absolute top-[88px] left-0 right-0 z-40 border-b border-gray-800 py-4 pb-6 transition-all shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+            <div className="md:hidden flex flex-col items-center bg-[#111]/98 backdrop-blur-md absolute top-[88px] left-0 right-0 z-40 border-b border-gray-800 py-4 pb-6 transition-all shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
               <a href="#" className="w-full text-center py-3 text-redTheme font-medium hover:bg-[#222]">Home</a>
               <a href="#about" className="w-full text-center py-3 text-gray-300 font-medium hover:text-redTheme hover:bg-[#222]">About</a>
               <a href="#services" className="w-full text-center py-3 text-gray-300 font-medium hover:text-redTheme hover:bg-[#222]">Services</a>
@@ -266,41 +329,41 @@ function App() {
           </div>
 
           {/* About Section */}
-          <section id="about" className="py-20 border-t border-gray-800 mt-10">
-            <div className="max-w-4xl mx-auto text-center mb-16">
+          <section id="about" className="py-12 md:py-20 border-t border-gray-800 mt-10">
+            <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 About <span className="text-redTheme">Me</span>
               </h2>
-              <div className="w-20 h-1 bg-redTheme mx-auto mb-8 shadow-[0_0_10px_#ff0000]"></div>
-              <p className="text-lg text-gray-400 leading-relaxed">
+              <div className="w-20 h-1 bg-redTheme mx-auto mb-6 md:mb-8 shadow-[0_0_10px_#ff0000]"></div>
+              <p className="text-base md:text-lg text-gray-400 leading-relaxed">
                 I am a student at the University of Cebu, passionately pursuing knowledge in Information Technology. My journey is driven by a deep curiosity for web development and a commitment to solving real-world problems through technology. I thrive in collaborative environments where I can both contribute and learn from experienced professionals.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
               {/* Education */}
-              <div className="bg-[#111] p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
-                <i data-feather="book" className="w-10 h-10 text-redTheme mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
-                <h3 className="text-xl font-semibold text-white mb-3">Education</h3>
-                <p className="text-gray-400 leading-relaxed">
+              <div className="bg-[#111] p-6 md:p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
+                <i data-feather="book" className="w-8 h-8 md:w-10 md:h-10 text-redTheme mb-5 md:mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2 md:mb-3">Education</h3>
+                <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                   Currently pursuing my degree in Information Technology at University of Cebu, with a focus on web development and database systems.
                 </p>
               </div>
               
               {/* Goals */}
-              <div className="bg-[#111] p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
-                <i data-feather="target" className="w-10 h-10 text-redTheme mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
-                <h3 className="text-xl font-semibold text-white mb-3">Goals</h3>
-                <p className="text-gray-400 leading-relaxed">
+              <div className="bg-[#111] p-6 md:p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
+                <i data-feather="target" className="w-8 h-8 md:w-10 md:h-10 text-redTheme mb-5 md:mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2 md:mb-3">Goals</h3>
+                <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                   To develop innovative web solutions that enhance user experience while continuously expanding my technical skillset and professional network.
                 </p>
               </div>
               
               {/* Passions */}
-              <div className="bg-[#111] p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
-                <i data-feather="heart" className="w-10 h-10 text-redTheme mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
-                <h3 className="text-xl font-semibold text-white mb-3">Passions</h3>
-                <p className="text-gray-400 leading-relaxed">
+              <div className="bg-[#111] p-6 md:p-8 rounded-lg border border-gray-800 hover:border-redTheme transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.2)] group">
+                <i data-feather="heart" className="w-8 h-8 md:w-10 md:h-10 text-redTheme mb-5 md:mb-6 group-hover:drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] transition-all"></i>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2 md:mb-3">Passions</h3>
+                <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                   Clean code, intuitive UI/UX design, and the endless possibilities of web technologies to transform ideas into functional digital experiences.
                 </p>
               </div>
@@ -308,18 +371,18 @@ function App() {
           </section>
 
           {/* Services (Skills) Section */}
-          <section id="services" className="py-20 border-t border-gray-800">
-            <div className="max-w-4xl mx-auto text-center mb-16">
+          <section id="services" className="py-12 md:py-20 border-t border-gray-800">
+            <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Technical <span className="text-redTheme">Skills</span>
               </h2>
-              <div className="w-20 h-1 bg-redTheme mx-auto mb-8 shadow-[0_0_10px_#ff0000]"></div>
-              <p className="text-lg text-gray-400">
+              <div className="w-20 h-1 bg-redTheme mx-auto mb-6 md:mb-8 shadow-[0_0_10px_#ff0000]"></div>
+              <p className="text-base md:text-lg text-gray-400">
                 A collection of technologies I've worked with and continue to develop expertise in.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Skill Items */}
               {[
                 { name: 'React', icon: 'code', percentage: '90%' },
@@ -343,13 +406,13 @@ function App() {
           </section>
 
           {/* Portfolio (Projects) Section */}
-          <section id="portfolio" className="py-20 border-t border-gray-800">
-            <div className="max-w-4xl mx-auto text-center mb-16">
+          <section id="portfolio" className="py-12 md:py-20 border-t border-gray-800">
+            <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Featured <span className="text-redTheme">Projects</span>
               </h2>
-              <div className="w-20 h-1 bg-redTheme mx-auto mb-8 shadow-[0_0_10px_#ff0000]"></div>
-              <p className="text-lg text-gray-400">
+              <div className="w-20 h-1 bg-redTheme mx-auto mb-6 md:mb-8 shadow-[0_0_10px_#ff0000]"></div>
+              <p className="text-base md:text-lg text-gray-400">
                 A selection of my recent work showcasing my technical abilities and problem-solving approach.
               </p>
             </div>
@@ -427,37 +490,37 @@ function App() {
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="py-20 border-t border-gray-800">
+          <section id="contact" className="py-12 md:py-20 border-t border-gray-800">
             <div className="max-w-5xl mx-auto">
               <div className="bg-[#111] rounded-xl overflow-hidden shadow-2xl border border-gray-800">
                 <div className="md:flex">
                   {/* Contact Info */}
-                  <div className="md:w-5/12 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] p-10 text-white relative overflow-hidden border-r border-gray-800">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-redTheme opacity-10 rounded-bl-full blur-2xl"></div>
+                  <div className="md:w-5/12 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] p-6 lg:p-10 text-white relative overflow-hidden md:border-r md:border-b-0 border-b border-gray-800">
+                    <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-redTheme opacity-10 rounded-bl-full blur-2xl"></div>
                     <div className="relative z-10">
-                      <h2 className="text-3xl font-bold mb-2">Get In <span className="text-redTheme">Touch</span></h2>
-                      <div className="w-12 h-1 bg-redTheme mb-8 shadow-[0_0_10px_#ff0000]"></div>
-                      <p className="mb-10 text-gray-400 leading-relaxed">
+                      <h2 className="text-2xl md:text-3xl font-bold mb-2">Get In <span className="text-redTheme">Touch</span></h2>
+                      <div className="w-12 h-1 bg-redTheme mb-6 md:mb-8 shadow-[0_0_10px_#ff0000]"></div>
+                      <p className="mb-8 md:mb-10 text-sm md:text-base text-gray-400 leading-relaxed">
                         Interested in collaborating or have questions about my work? Feel free to reach out—I'm always open to discussing new projects and opportunities.
                       </p>
                       
-                      <div className="space-y-6">
+                      <div className="space-y-5 md:space-y-6">
                         <div className="flex items-start">
-                          <div className="bg-[#222] p-3 rounded-full mr-4 text-redTheme">
-                            <i data-feather="mail" className="w-5 h-5"></i>
+                          <div className="bg-[#222] p-2.5 md:p-3 rounded-full mr-4 text-redTheme">
+                            <i data-feather="mail" className="w-4 h-4 md:w-5 md:h-5"></i>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-lg">Email</h4>
-                            <p className="text-gray-400">Chrisninopagente2@gmail.com</p>
+                            <h4 className="font-semibold text-base md:text-lg">Email</h4>
+                            <p className="text-sm md:text-base text-gray-400 break-all md:break-normal">Chrisninopagente2@gmail.com</p>
                           </div>
                         </div>
                         <div className="flex items-start">
-                          <div className="bg-[#222] p-3 rounded-full mr-4 text-redTheme">
-                            <i data-feather="map-pin" className="w-5 h-5"></i>
+                          <div className="bg-[#222] p-2.5 md:p-3 rounded-full mr-4 text-redTheme">
+                            <i data-feather="map-pin" className="w-4 h-4 md:w-5 md:h-5"></i>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-lg">Location</h4>
-                            <p className="text-gray-400">University of Cebu, Philippines</p>
+                            <h4 className="font-semibold text-base md:text-lg">Location</h4>
+                            <p className="text-sm md:text-base text-gray-400">University of Cebu, Philippines</p>
                           </div>
                         </div>
                       </div>
@@ -465,35 +528,35 @@ function App() {
                   </div>
                   
                   {/* Contact Form */}
-                  <div className="md:w-7/12 p-10 bg-[#0d0d0d]">
-                    <form className="space-y-6" onSubmit={handleFormSubmit}>
+                  <div className="md:w-7/12 p-6 lg:p-10 bg-[#0d0d0d]">
+                    <form className="space-y-5 md:space-y-6" onSubmit={handleFormSubmit}>
                       {/* FormSubmit spam protection: Honeypot field (hidden from users, filled by bots) */}
                       <input type="text" name="_honey" style={{ display: 'none' }} tabIndex="-1" autoComplete="off" />
                       
                       {/* You can change this to "true" or remove this line entirely to enable a required reCAPTCHA check */}
                       <input type="hidden" name="_captcha" value="false" />
-                      <div className="grid md:grid-cols-2 gap-6">
+                      <div className="grid md:grid-cols-2 gap-5 md:gap-6">
                         <div>
                           <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Your Name</label>
-                          <input type="text" id="name" name="name" required className="w-full bg-[#1a1a1a] text-white px-4 py-3 border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="John Doe" />
+                          <input type="text" id="name" name="name" required className="w-full bg-[#1a1a1a] text-white px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="John Doe" />
                         </div>
                         <div>
                           <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Your Email</label>
-                          <input type="email" id="email" name="email" required className="w-full bg-[#1a1a1a] text-white px-4 py-3 border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="john@example.com" />
+                          <input type="email" id="email" name="email" required className="w-full bg-[#1a1a1a] text-white px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="john@example.com" />
                         </div>
                       </div>
                       <div>
                         <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">Subject</label>
-                        <input type="text" id="subject" name="_subject" className="w-full bg-[#1a1a1a] text-white px-4 py-3 border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="Project Inquiry" />
+                        <input type="text" id="subject" name="_subject" className="w-full bg-[#1a1a1a] text-white px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors" placeholder="Project Inquiry" />
                       </div>
                       <div>
                         <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Message</label>
-                        <textarea id="message" name="message" required rows="5" className="w-full bg-[#1a1a1a] text-white px-4 py-3 border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors resize-none" placeholder="Hello, I'd like to talk about..."></textarea>
+                        <textarea id="message" name="message" required rows="5" className="w-full bg-[#1a1a1a] text-white px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-800 rounded-lg focus:outline-none focus:border-redTheme focus:ring-1 focus:ring-redTheme transition-colors resize-none" placeholder="Hello, I'd like to talk about..."></textarea>
                       </div>
                       <button 
                         type="submit" 
                         disabled={formStatus === 'submitting'}
-                        className={`w-full py-4 rounded-lg font-bold flex items-center justify-center tracking-wider transition-all ${
+                        className={`w-full py-3.5 md:py-4 rounded-lg font-bold flex items-center justify-center tracking-wider transition-all text-sm md:text-base ${
                           formStatus === 'success' 
                             ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg' 
                             : formStatus === 'error'
@@ -503,19 +566,19 @@ function App() {
                       >
                         {formStatus === 'submitting' ? (
                           <>
-                            <i data-feather="loader" className="w-5 h-5 mr-2 animate-spin"></i> SENDING...
+                            <i data-feather="loader" className="w-4 h-4 md:w-5 md:h-5 mr-2 animate-spin"></i> SENDING...
                           </>
                         ) : formStatus === 'success' ? (
                           <>
-                            <i data-feather="check-circle" className="w-5 h-5 mr-2"></i> SENT SUCCESSFULLY!
+                            <i data-feather="check-circle" className="w-4 h-4 md:w-5 md:h-5 mr-2"></i> SENT SUCCESSFULLY!
                           </>
                         ) : formStatus === 'error' ? (
                           <>
-                            <i data-feather="x-circle" className="w-5 h-5 mr-2"></i> ERROR. TRY AGAIN.
+                            <i data-feather="x-circle" className="w-4 h-4 md:w-5 md:h-5 mr-2"></i> ERROR. TRY AGAIN.
                           </>
                         ) : (
                           <>
-                            <i data-feather="send" className="w-5 h-5 mr-2"></i> SEND MESSAGE
+                            <i data-feather="send" className="w-4 h-4 md:w-5 md:h-5 mr-2"></i> SEND MESSAGE
                           </>
                         )}
                       </button>
