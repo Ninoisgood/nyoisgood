@@ -10,5 +10,48 @@
   <body class="bg-[#0b0b0b] text-white antialiased overflow-hidden font-sans">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+      Chatbot.init({
+          chatflowid: "06ab5077-6744-4d72-93cf-d1978bd9e87d",
+          apiHost: "https://cloud.flowiseai.com",
+          theme: {
+              button: {
+                  backgroundColor: "#ff0000",
+                  right: 20,
+                  bottom: 20,
+                  size: 56,
+                  iconColor: "white"
+              },
+              chatWindow: {
+                  welcomeMessage: "Hello! How can I help you today?",
+                  backgroundColor: "#111111",
+                  height: 600,
+                  width: 400,
+                  fontSize: 16,
+                  poweredByTextColor: "#555555",
+                  botMessage: {
+                      backgroundColor: "#222222",
+                      textColor: "#ffffff",
+                      showAvatar: true
+                  },
+                  userMessage: {
+                      backgroundColor: "#ff0000",
+                      textColor: "#ffffff",
+                      showAvatar: false
+                  },
+                  textInput: {
+                      placeholder: "Type your message...",
+                      backgroundColor: "#1a1a1a",
+                      textColor: "#ffffff",
+                      sendButtonColor: "#ff0000",
+                      autoFocus: true,
+                      sendMessageSound: true,
+                      receiveMessageSound: true
+                  }
+              }
+          }
+      })
+    </script>
   </body>
 </html>
